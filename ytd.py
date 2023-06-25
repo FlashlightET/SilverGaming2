@@ -314,4 +314,6 @@ def updateFile(line, shit):
 token=get_token()
 #bot.loop.create_task(start_status())
 print('gorbon')
-bot.run('MzAzMjMxNzI4MjEyOTAxODkx.WPO0jQ.Z7MZAilHQphOo-yp7LL9n8pQ6_8')
+with open('x:\\zamnboss_token.txt','r') as f:
+    token=f.readlines()[0].strip('\r\n')
+bot.run(token)
