@@ -92,10 +92,8 @@ import base64
 from PIL import Image, PngImagePlugin
 
 def newreplace(in_,rep1,rep2): #thing that replaces things
-    if rep1 in in_:
-        return in_.replace(rep1,rep2)
-    else:
-        return in_
+    if rep1 in in_: return in_.replace(rep1,rep2)
+    return in_
 
 def ran(a,b):
     return random.randint(a,b)/100
@@ -226,27 +224,8 @@ def baka_shit(): #dame dame dame yo dame mamo yo
     os.chdir('h:\\frart')
     return 'yay!'
     
-    
-def svc_shit(): #ewwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-    os.chdir('x:\\diffsvc\\diff-svc\\')
-    kys=subprocess.check_call('cd /d x:\\diffsvc\\diff-svc\\ && conda activate diffsvc && python infer_bot.py', shell=True)
-    os.chdir('h:\\frart')
-    return 'yay!'
-    
-def serval_svc_shit():
-    os.chdir('x:\\diffsvc\\diff-svc\\')
-    kys=subprocess.check_call('cd /d x:\\diffsvc\\diff-svc\\ && conda activate diffsvc && python infer_serval.py', shell=True)
-    os.chdir('h:\\frart')
-    return 'yay!'
-    
-def nanoda_svc_shit():
-    os.chdir('x:\\diffsvc\\diff-svc\\')
-    kys=subprocess.check_call('cd /d x:\\diffsvc\\diff-svc\\ && conda activate diffsvc && python infer_nanoda.py', shell=True)
-    os.chdir('h:\\frart')
-    return 'yay!'
-    
 def blahja(uuid): #?????????????????????????????????????????
-    
+    #i still have no clue what the fuck this is supposed to do
     return 'the n word'
 
 def thor(tofind,theuhh,ayytch):
@@ -302,10 +281,9 @@ class UtilityCommands(commands.Cog):
             
     @commands.command() #INSECAM
     async def cam(self, ctx: commands.Context, *, fuck=''):
-        
         z=get_data("cams")
         woombly=random.choice(z)
-        #await ctx.send(str(woombly))
+        
         if woombly['type'] in ['wtov','jpeg']:
             q=requests.get(woombly['url'])
             with open('cam.jpg', 'wb') as f:
@@ -347,32 +325,21 @@ class UtilityCommands(commands.Cog):
                 files_to_send.append(discord.File(f))
         await ctx.send(files=files_to_send)
 
-    @commands.command() #WHAT DOES THIS EVEN DO
-    async def wtf(self, ctx: commands.Context, *args):
-        sticker=await fetch_sticker(1066642716072616017)
-        await ctx.send(stickers=sticker)
-        
-        
-    
-
-    
-
-
-
     @tasks.loop(seconds=1.0)
-    async def medbay(self):
-        global ungrok_override
+    async def medbay(self): #main loop
+        global ungrok_override #vram autodisable override for grok
+        
+        #get vram for grok
         GPUs = GPUtil.getGPUs()[0]
-        #await ctx.send(str(GPUs))
-        #await ctx.send(str(GPUs.memoryFree))
         free=round(GPUs.memoryFree/100)/10
         used=12-free
         total=12
         if free>6:
             ungrok_override=False
-        print(f'UNIXTIME: {time.time()}')
+            
+        
+        #check if grok is stale enough to unload
         global groktimer
-        print(f'GROKTIME: {groktimer}')
         if time.time()>groktimer: 
             if groktimer!=0:
                 print('unloading sd models')
@@ -383,6 +350,7 @@ class UtilityCommands(commands.Cog):
                     print(str(jerma))
                 groktimer=0
                 
+        #In My House Playing DDLC
         global stammerqueue
         if len(stammerqueue)>0: #process the in my house playing ddlc queue
             try:
@@ -407,14 +375,14 @@ class UtilityCommands(commands.Cog):
         try:
             joebiden=(grokqueue[0][0])
         except IndexError:
-            canGrokk=False
+            canGrokk=False #make it shut the fuck up if there are no groks in queue ?
         global ungrok
         
         global grokReason
         
         if ungrok==True: canGrokk=False
         if ungrok_override==True: canGrokk=False
-        if canGrokk:
+        if canGrokk: #Porn Generator (Not for kids or christians)
             maintenanceMode=False
             #print('BEFORE: '+str(grokqueue))
             org=grokqueue[0]
@@ -499,250 +467,143 @@ class UtilityCommands(commands.Cog):
                 
                 prompt=prompt.replace('ezogaming','eeegaming')
                 prompt=prompt.replace('ezomodel','eeemodel')
-                for i in ['ezo','caracal','island fox','raccoon','arai','astolfo','anya','red fox','silver fox','izuna','serval','fennec','dhole','coyo','australian','rotty','senko','natsuki','toki','tsuchinoko','yuki']:
-                    if i in prompt: chardef=True
-                    
-                clothes=True
-                for i in ['different clothes','alternate outfit','alternate clothes','alternate costume','different outfit','different costume','swimsuit','bikini','shirt','pants','jeans','shorts','skirt','dress','suit','outfit','costume','clothes','sweater','jacket','hoodie','coat','gloves','bare','panties','bra','underwear','nude','naked']:
-                    if i in prompt: clothes=False
                 prompt=prompt.replace("hex maniac","<lora:hexManiacPokemonLora_1:0.7> hex maniac")
                 prompt=prompt.replace("mori calliope","<lora:calliopeMoriHololive_v10:0.7> mori calliope")
                 prompt=prompt.replace("(kemono friends)","")
                 if ' kemono friends ' in prompt:
-                    prompt=prompt.replace(" kemono friends ","<lora:kemonoFriendsOfficial_kemonoFriendsOfficial:0.9>, kemono friends, ")+', art by mine yoshizaki'
+                    prompt=prompt.replace(" kemono friends ","<lora:kemonoFriendsOfficial_kemonoFriendsOfficial:0.9> kemono friends, ")+', art by mine yoshizaki'
                 if ' kemonofriends ' in prompt:
-                    prompt=prompt.replace(" kemonofriends ","<lora:kemonoFriendsOfficial_kemonoFriendsOfficial:0.9>, ")+', art by mine yoshizaki'
+                    prompt=prompt.replace(" kemonofriends ","<lora:kemonoFriendsOfficial_kemonoFriendsOfficial:0.9> ")+', art by mine yoshizaki'
                 prompt=prompt.replace('among us','<lora:amongus:1> among us')
                 prompt=prompt.replace('big chungus','<lora:bigchungus:0.4> big chungus')
                 prompt=prompt.replace("ezo red fox","ezo")
-                prompt=newreplace(prompt,"ezo","<lora:ezo:"+str(ran(60,80))+">, ezo, ezo GRGGRGRGR \(kemono friends\), 1girl, solo, ")
-                #if not clothes: prompt=newreplace(prompt,"ezo","<lora:ezo:"+str(ran(70,100))+">, ezo, 1girl, solo, animal ears, fox ears, long hair, fox tail, blonde hair, hair between eyes, very long hair, fox girl, bangs, orange eyes, brown tipped ears, brown tail, ")
+                prompt=newreplace(prompt,"ezo","<lora:ezo:0.75> ezo, ezo GRGGRGRGR \(kemono friends\), 1girl, solo, ")
                 if 'appleq' in prompt: prompt='<lora:appleq:1> '+prompt
-                prompt=newreplace(prompt,"caracal","<lora:floppa:"+str(ran(60,80))+">, floppa, 1girl, ((solo)), caracal \(kemono friends\), ")
-                #if not clothes: prompt=newreplace(prompt,"caracal","<lora:floppa:"+str(ran(70,100))+">, floppa, 1girl, ((solo)), animal ears, caracal ears, blue eyes, caracal tail, orange hair, long hair, hair between eyes, bangs, sidelocks, large breasts, ")
+                prompt=newreplace(prompt,"caracal","<lora:floppa:0.75> floppa, 1girl, ((solo)), caracal \(kemono friends\), ")
                 prompt=prompt.replace("prushka","<lora:prushka:0.75> prushka")
                 prompt=prompt.replace("boykisser","<lora:boykisser:0.75> boykisser")
                 prompt=prompt.replace("island fox","shimahai")
-                if clothes: prompt=newreplace(prompt,"shimahai","<lora:shimahai:"+str(ran(70,100))+">, shimahai, 1girl, ((solo)), animal ears, virtual youtuber, short hair, fox girl, fox ears, fox tail, gray gloves, gray pleated skirt, white necktie, twintails, black undershirt, grey hair, orange hair, red blazer, white loafers, red beret, yellow eyes, microphone, long sleeves, fur trim, black belt, bangs, hair between eyes, orange legwear, two-tone hair, black hair ribbon, frilled skirt, sidelocks, breast pocket, ")
-                if not clothes: prompt=newreplace(prompt,"shimahai","<lora:shimahai:"+str(ran(70,100))+">, shimahai, 1girl, ((solo)), animal ears, virtual youtuber, short hair, fox girl, fox ears, fox tail, twintails, grey hair, orange hair, red beret, yellow eyes, microphone, bangs, hair between eyes, two-tone hair, black hair ribbon, sidelocks, ")
-                
-                prompt=prompt.replace("astolfo","<lora:astolfo1:"+str(ran(70,100))+">, astolfo, 1boy,")
-                
-                prompt=prompt.replace("jerma","<lora:jerma:"+str(ran(70,100))+"> Jerma985")
-                
-                prompt=prompt.replace("fursuit","<lora:fursuit_good:"+str(ran(90,100))+"> fursuit")
-
-                #prompt=prompt.replace("common raccoon","raccoon")
-                #prompt=prompt.replace("arai","raccoon")
-                #if clothes: prompt=newreplace(prompt,"araisan","<lora:araisan:"+str(ran(70,100))+">, araisan, 1girl, animal ears, raccoon ears, solo, raccoon tail, grey hair, short hair, skirt, black bowtie, brown eyes, fur collar, puffy short sleeves, fang, raccoon girl, periwinkle shirt, pleated skirt, pantyhose, black skirt, bangs, black and white gloves, hair between eyes, white legwear, ")
-                #if not clothes: prompt=newreplace(prompt,"araisan","<lora:araisan:"+str(ran(70,100))+">, araisan, 1girl, animal ears, raccoon ears, solo, raccoon tail, grey hair, short hair, brown eyes, fang, raccoon girl, bangs, hair between eyes, ")
-                prompt=newreplace(prompt,"araisan","<lora:araisan:0.75>, araisan, common raccoon \(kemono friends\), 1girl, solo, ")
-                prompt=prompt.replace("anya forger","hgsfjhfgj")
-                prompt=prompt.replace("anya","hgsfjhfgj")
-                prompt=newreplace(prompt,"hgsfjhfgj","<lora:anya:"+str(ran(70,100))+">, anya forger,")
-
-                if clothes: prompt=newreplace(prompt,"red fox","<lora:akagitsu:"+str(ran(70,100))+">, akagitsu, 1girl, solo, animal ears, fox ears, long hair, fox tail, ginger hair, gray pleated skirt, black gloves, black sleeves, white bowtie, black knee-highs, short sleeves, yellow necktie, white shirt, orange sleeves, hair between eyes, very long hair, fox girl, bangs, orange eyes, black loafers, brown tipped ears, black tail, white tipped tail, breast pocket, breasts, ")
-                if not clothes: prompt=newreplace(prompt,"red fox","<lora:akagitsu:"+str(ran(70,100))+">, akagitsu, 1girl, solo, animal ears, fox ears, long hair, fox tail, ginger hair, hair between eyes, very long hair, fox girl, bangs, orange eyes, brown tipped ears, black tail, white tipped tail, ")
-                
-                
-                prompt=prompt.replace('mirai','<lora:mirai:0.7>, mirai \(kemono friends\), 1girl, solo, green hair')
-                prompt=prompt.replace('cartoon2','<lora:cartoonFanartStyle_v10:0.35>, cartoon fanart style, ')
-                
-                prompt=prompt.replace('bimbo','<lora:bimbo:0.7>, BimboT, ')
-                
-                
+                prompt=newreplace(prompt,"shimahai","<lora:shimahai:0.75> shimahai, island fox \(kemono friends\), 1girl, ((solo)), ")
+                prompt=prompt.replace("astolfo","<lora:astolfo1:0.8> astolfo, 1boy,")
+                prompt=prompt.replace("jerma","<lora:jerma:0.8> Jerma985")
+                prompt=prompt.replace("fursuit","<lora:fursuit_good:0.9> fursuit")
+                prompt=newreplace(prompt,"araisan","<lora:araisan:0.75> araisan, common raccoon \(kemono friends\), 1girl, solo, ")
+                prompt=prompt.replace("anya forger","anya")
+                prompt=newreplace(prompt,"anya","<lora:anya:0.8> anya forger,")
+                prompt=newreplace(prompt,"red fox","<lora:akagitsu:0.75> akagitsu, red fox \(kemono friends\), 1girl, solo, ")
+                prompt=prompt.replace('mirai','<lora:mirai:0.7> mirai \(kemono friends\), 1girl, solo, green hair')
+                prompt=prompt.replace('cartoon2','<lora:cartoonFanartStyle_v10:0.35> cartoon fanart style, ')
+                prompt=prompt.replace('bimbo','<lora:bimbo:0.7> BimboT, ')
                 prompt=prompt.replace("australian devil","rotty")
-                if clothes: prompt=newreplace(prompt,"rotty","<lora:aussie:"+str(ran(70,100))+">, ausdev, 1girl, eyepatch, solo, medical eyepatch, long hair, black hair, tasmanian devil ears, tasmanian devil tail, brown eyes, detached sleeves, bangs, long sleeves, bare shoulders, empty eyes, frills, brown gloves, black pleated skirt, one eye covered, black neckwear, black sleeves, two-tone hair, black bowtie, black thigh-highs, black sleeveless shirt, black waist apron, ")
-                if not clothes: prompt=newreplace(prompt,"rotty","<lora:aussie:"+str(ran(70,100))+">, ausdev, 1girl, eyepatch, solo, medical eyepatch, long hair, black hair, tasmanian devil ears, tasmanian devil tail, brown eyes, bangs, empty eyes, one eye covered, two-tone hair, ")
-                
-                prompt=newreplace(prompt,"coyote","<lora:coyo:0.7>, coyo, 1girl, ((solo)), coyote \(kemono friends\), ")
-                #if not clothes: prompt=newreplace(prompt,"coyote","<lora:coyo:"+str(ran(70,100))+">, coyo, 1girl, ((solo)), animal ears, short hair, beige hair, virtual youtuber, yellow eyes, coyote ears, tail, coyote girl, coyote tail, hair between eyes, dark skin, ")
-                
-                prompt=newreplace(prompt,"dhole","<lora:dolr:"+str(ran(70,100))+">, dolr, dhole \(kemono friends\), 1girl, solo, ")
-                #if not clothes: prompt=newreplace(prompt,"dhole","<lora:dolr:"+str(ran(70,100))+">, dolr, 1girl, animal ears, tail, dog ears, dog tail, brown hair, short hair, dog girl, bangs, brown eyes, yellow eyes, sidelocks, hair between eyes, ")
-                
+                prompt=newreplace(prompt,"rotty","<lora:aussie:0.75> ausdev, australian devil \(kemono friends\), 1girl, solo, medical eyepatch, ")
+                prompt=newreplace(prompt,"coyote","<lora:coyo:0.7> coyo, 1girl, ((solo)), coyote \(kemono friends\), ")
+                prompt=newreplace(prompt,"dhole","<lora:dolr:0.75> dolr, dhole \(kemono friends\), 1girl, solo, ")
                 prompt=prompt.replace('vore','<lora:stomachInteriorVore_v2Loha:0.7> stomach interior, vore')
                 prompt=prompt.replace('mrbeast','<lora:jimmyDonaldsonMrBeast_10b:0.8> jimmy_mr_beast')
-                
-                if clothes: prompt=newreplace(prompt,"korone","<lora:korone:"+str(ran(70,100))+">, korone, inugami korone, solo, 1girl, hololive, virtual youtuber, dog ears, brown hair, dog girl, bone hair ornament, dog tail, brown eyes, bangs, low twin braids, hair between eyes, long hair, red dog collar, open yellow jacket, white dress, shirt, fangs, long sleeves, ")
-                if not clothes: prompt=newreplace(prompt,"korone","<lora:korone:"+str(ran(70,100))+">, korone, inugami korone, solo, 1girl, hololive, virtual youtuber, dog ears, brown hair, dog girl, bone hair ornament, dog tail, brown eyes, bangs, low twin braids, hair between eyes, long hair, red dog collar, fangs, ")
-                
-                if clothes: prompt=newreplace(prompt,"neuro-sama","<lora:neuroSamaMomoseHiyori_v10:"+str(ran(70,100))+"> brown school uniform, long sleeves, hair ribbon, long hair, neuro-sama")
-                if not clothes: prompt=newreplace(prompt,"neuro-sama","<lora:neuroSamaMomoseHiyori_v10:"+str(ran(70,100))+"> hair ribbon, long hair, neuro-sama")
-                
-                
-                
-                #if clothes: prompt=newreplace(prompt,"fennec","<lora:feen:"+str(ran(70,100))+">, feen, 1girl, fennec ears, big ears, solo, blonde hair, short hair, fox tail, yellow bowtie, white pleated skirt, brown eyes, puffy short sleeves, yellow gloves, yellow thigh-highs, pink short sleeved v-neck sweater, white undershirt, bangs, fox girl, fur trim, yellow neckwear, yellow sleeves, hair between eyes, white shoes, breast pocket, ")
-                #if not clothes: prompt=newreplace(prompt,"fennec","<lora:feen:"+str(ran(70,100))+">, feen, 1girl, fennec ears, big ears, solo, blonde hair, short hair, fox tail, brown eyes, bangs, fox girl, hair between eyes, ")
-                
-                prompt=newreplace(prompt,"fennec","<lora:feen:0.75>, feen, fennec \(kemono friends\), 1girl, solo")
-                
-                prompt=prompt.replace("fubuki","<lora:fubuki2:"+str(ran(70,100))+">, fubuki")
-
-                if clothes: prompt=newreplace(prompt,"ryouna","<lora:ryouna:"+str(ran(70,90))+">, ryouna, ryouna (senran kagura), (solo), 1girl, breasts, short blonde hair, large breasts, heterochromia, green eyes, blue eyes, cleavage, white thighhighs, bare shoulders, white wings, tiara, white gloves, jewelry, ahoge, dress, collarbone, bangs, ")
-                if not clothes: prompt=newreplace(prompt,"ryouna","<lora:ryouna:"+str(ran(70,90))+">, ryouna, ryouna (senran kagura), (solo), 1girl, breasts, short blonde hair, large breasts, heterochromia, green eyes, blue eyes, ahoge, bangs, ")
-
-
-
-
-
+                prompt=newreplace(prompt,"korone","<lora:korone:0.75> korone, inugami korone, solo, 1girl, ")
+                prompt=newreplace(prompt,"neuro-sama","<lora:neuroSamaMomoseHiyori_v10:0.75> neuro-sama")
+                prompt=newreplace(prompt,"fennec","<lora:feen:0.75> feen, fennec \(kemono friends\), 1girl, solo")
+                prompt=prompt.replace("fubuki","<lora:fubuki2:0.75> fubuki")
+                prompt=newreplace(prompt,"ryouna","<lora:ryouna:0.75> ryouna, ryouna (senran kagura), (solo), 1girl, ahoge, ")
                 prompt=prompt.replace('hyperbreasts','<lora:hyper_breasts_1.8k-lr1e-4-av3-LoRA_epoc12-v5:0.4> hyperbreasts')
-                
-
                 prompt=prompt.replace('eee','ezo')
-                if "fumo" in prompt: prompt="<lora:fumo:"+str(ran(70,100))+">, "+prompt
-                if "cdi" in prompt: prompt="<lora:cdi:"+str(ran(85,100))+">, "+prompt
-                if "cd-i" in prompt: prompt="<lora:cdi:0.9>, "+prompt
-                if "90s" in prompt: prompt="<lora:90s:"+str(ran(50,70))+">, "+prompt
-                if "anime screen" in prompt: prompt="<lora:anime:"+str(ran(20,45))+">, "+prompt
-                if "leffrey" in prompt: prompt="<lora:leffrey:"+str(ran(85,100))+">, "+prompt
-                if "danny" in prompt and 'gee' not in prompt: prompt="<lora:danny:"+str(ran(85,100))+">, "+prompt
-                if "kf1" in prompt: prompt="<lora:kf1style_v3_abyss-000016:"+str(0.8)+">, "+prompt
-                if "bottomheavy" in prompt: prompt: prompt="<lora:hyperBottomHeavy_v1:"+str(ran(20,45))+">, "+prompt
-                if "persona" in prompt: prompt: prompt="<lora:persona:"+str(ran(50,60))+">, "+prompt
-                if "soejima shigenori" in prompt: prompt: prompt="<lora:persona:"+str(ran(50,60))+">, "+prompt
-                if "ftm" in prompt: prompt: prompt="<lora:ftm:"+str((ran(30,40)+ran(30,90))/2)+">, "+prompt
-                if "ezogaming" in prompt: prompt: prompt="<lora:ezomodel:"+str(ran(70,90))+">, "+prompt
-                if "vhs" in prompt: prompt: prompt="<lora:vhs:"+str(ran(120,200))+">, "+prompt
-                if "polaroid" in prompt or 'pqr' in prompt: prompt="<lora:photo:"+str(ran(120,170))+">, vintage polaroid analog portrait photography of"+(prompt.replace('polaroid','').replace('pqr',''))
+                if "fumo" in prompt: prompt="<lora:fumo:0.85> "+prompt
+                if "cdi" in prompt: prompt="<lora:cdi:0.9> "+prompt
+                if "cd-i" in prompt: prompt="<lora:cdi:0.9> "+prompt
+                if "90s" in prompt: prompt="<lora:90s:0.6> "+prompt
+                if "anime screen" in prompt: prompt="<lora:anime:0.4> "+prompt
+                if "leffrey" in prompt: prompt="<lora:leffrey:0.9> "+prompt
+                if "danny" in prompt and 'gee' not in prompt: prompt="<lora:danny:0.9> "+prompt
+                if "kf1" in prompt: prompt="<lora:kf1style_v3_abyss-000016:0.8> "+prompt
+                if "bottomheavy" in prompt: prompt: prompt="<lora:hyperBottomHeavy_v1:0.4> "+prompt
+                if "persona" in prompt: prompt: prompt="<lora:persona:0.5> "+prompt
+                if "soejima shigenori" in prompt: prompt: prompt="<lora:persona:0.5> "+prompt
+                if "ftm" in prompt: prompt: prompt="<lora:ftm:0.4> "+prompt
+                if "ezogaming" in prompt: prompt: prompt="<lora:ezomodel:0.8> "+prompt
+                if "vhs" in prompt: prompt: prompt="<lora:vhs:1.2> "+prompt
+                if "polaroid" in prompt or 'pqr' in prompt: prompt="<lora:photo:1.2> vintage polaroid analog portrait photography of"+(prompt.replace('polaroid','').replace('pqr',''))
                 if "sayoriv4" in prompt: prompt=prompt.replace('sayoriv4',"<lora:sayoriv4:2.7>)")
-                if "analog" in prompt and 'polaroid' not in prompt: prompt="<lora:analog:"+str(ran(100,140))+">, (analog style film still of) "+(prompt.replace('analog',''))
-                if "shrift" in prompt: prompt="<lora:nekomata:"+str(ran(80,120))+">, ((SHRIFT, nekomata-aran)), simple shading, flat shading, pixel art, lowres, "+(prompt.replace('shrift',''))
-                
-                
-                
+                if "analog" in prompt and 'polaroid' not in prompt: prompt="<lora:analog:1.2> (analog style film still of) "+(prompt.replace('analog',''))
+                if "shrift" in prompt: prompt="<lora:nekomata:1> ((SHRIFT, nekomata-aran)), simple shading, flat shading, pixel art, lowres, "+(prompt.replace('shrift',''))
                 if 'leash' in prompt:
                     if "sub" in prompt:
-                        prompt="((<lora:leash_sub:"+str(ran(90,110))+">, leashed_pov, ))"+prompt
+                        prompt="((<lora:leash_sub:1> leashed_pov, ))"+prompt
                     if "dom" in prompt:
-                        prompt="((<lora:leash_dom:"+str(ran(90,110))+">, leashing_pov, ))"+prompt
-                        
-                
-                
-                
-                
-                prompt=prompt.replace('izuna','tttttttttttttttttttttttttttttttt')
-                
-                
-                
-                if clothes: prompt=newreplace(prompt,"bondrewd","<lora:bondrewd:"+str(ran(70,100))+">, bdsks, mask, black jacket, white whistle, ")
-                if not clothes: prompt=newreplace(prompt,"bondrewd","<lora:bondrewd:"+str(ran(70,100))+">, bdsks, mask, white whistle, ")
-
-
-
+                        prompt="((<lora:leash_dom:1> leashing_pov, ))"+prompt
+                prompt=newreplace(prompt,"bondrewd","<lora:bondrewd:0.8> bdsks, mask, white whistle, ")
                 prompt=prompt.replace("silver fox","silver")
-                prompt=newreplace(prompt,"silver","<lora:gingitsu:0.7>, gingitsu, silver fox \(kemono friends\), 1girl, solo, ")
-                #if not clothes: prompt=newreplace(prompt,"silver","<lora:gingitsu:"+str(ran(70,100))+">, gingitsu, 1girl, solo, animal ears, fox ears, long hair, fox tail, silver hair, hair between eyes, very long hair, fox girl, bangs, orange eyes, sidelocks, black ears, black tail, white tipped tail, ")
-                
-                if "tttttttttttttttttttttttttttttttt" in prompt:
-                    #if "swimsuit" in prompt or 'beach' in prompt:
-                        #prompt=newreplace(prompt,"tttttttttttttttttttttttttttttttt","<lora:tttttttttttttttttttttttttttttttt-v1-NAI-VAE-768px:"+str(ran(70,100))+">, tttttttttttttttttttttttttttttttt, blue archive, 1girl, halo, yellow eyes, brown hair, animal ears, fox girl, fox tail, fox hair ornament, bangs, medium breasts, red eyeshadow, striped bikini, denim shorts, visor cap, highleg bikini, red neckerchief, ")
-                   # else:
-                        #if clothes: prompt=newreplace(prompt,"tttttttttttttttttttttttttttttttt","<lora:tttttttttttttttttttttttttttttttt-v1-NAI-VAE-768px:"+str(ran(70,100))+">, tttttttttttttttttttttttttttttttt, blue archive, 1girl, halo, yellow eyes, brown hair, animal ears, fox girl, fox tail, fox hair ornament, bangs, medium breasts, red eyeshadow, blue sailor collar, red neckerchief, partially fingerless gloves, ninja, floral print, fishnets, single thighhigh, white shirt, blue pleated skirt, ")
-                        #if not clothes: prompt=newreplace(prompt,"tttttttttttttttttttttttttttttttt","<lora:tttttttttttttttttttttttttttttttt-v1-NAI-VAE-768px:"+str(ran(70,100))+">, tttttttttttttttttttttttttttttttt, blue archive, 1girl, halo, yellow eyes, brown hair, animal ears, fox girl, fox tail, fox hair ornament, bangs, medium breasts, red eyeshadow, ")
-                        prompt=prompt.replace('tttttttttttttttttttttttttttttttt','<lora:tttttttttttttttttttttttttttttttt-v1-NAI-VAE-768px:0.6456>, tttttttttttttttttttttttttttttttt \(blue archive\), 1girl, solo')
-                        
-                if clothes: prompt=newreplace(prompt,"japanese wolf","<lora:jpwolf:"+str(ran(70,100))+">, japanese wolf (kemono friends), 1girl, wolf ears, long hair, brown hair, wolf tail, skirt, fur collar, wolf girl, long sleeves, fang, thighhighs, plaid, pink skirt, sailor collar, yellow eyes, bangs, brown legwear, hair between eyes, pink neckerchief, brown shirt, serafuku, breast pocket, white gloves, ")
-                if not clothes: prompt=newreplace(prompt,"japanese wolf","<lora:jpwolf:"+str(ran(70,100))+">, japanese wolf (kemono friends), 1girl, wolf ears, long hair, brown hair, wolf tail, wolf girl, fang, yellow eyes, bangs, hair between eyes, ")
-                prompt=prompt.replace('grey wolf','<lora:g_wolkf:0.8>, g_wolkf, grey wolf \(kemono friends\), 1girl, solo, heterochromia')+' AND blue eyes, yellow eyes'
+                prompt=newreplace(prompt,"silver","<lora:gingitsu:0.7> gingitsu, silver fox \(kemono friends\), 1girl, solo, ")
+                prompt=prompt.replace('izuna','<lora:izuna-v1-NAI-VAE-768px:0.6456> izuna \(blue archive\), 1girl, solo') 
+                prompt=newreplace(prompt,"japanese wolf","<lora:jpwolf:0.8> japanese wolf (kemono friends), 1girl, solo, ")
+                prompt=prompt.replace('grey wolf','<lora:g_wolkf:0.8> g_wolkf, grey wolf \(kemono friends\), 1girl, solo, heterochromia')+' AND blue eyes, yellow eyes'
                 prompt=prompt.replace("greater roadrunner","roadrunner")
-                if clothes: prompt=newreplace(prompt,"roadrunner","<lora:kusomeepchan:"+str(ran(70,100))+">, kusomeepchan, 1girl, ((solo)), shirt, beige hair, short sleeves, head wings, bird tail, beige bike shorts, short hair, hair between eyes, aqua t-shirt, shirt writing, bangs, hair tubes, yellow eyes, feather hair ornament, sidelocks, bare arms, watch, ")
-                if not clothes: prompt=newreplace(prompt,"roadrunner","<lora:kusomeepchan:"+str(ran(70,100))+">, kusomeepchan, 1girl, ((solo)), beige hair, short sleeves, head wings, bird tail, short hair, hair between eyes, bangs, hair tubes, yellow eyes, feather hair ornament, sidelocks, watch, ")
-                
+                #prompt=prompt.replace("penis","<lora:penisLora_v1:"+str(ran(60,90))+"> penis")
+                prompt=newreplace(prompt,"roadrunner","<lora:kusomeepchan:0.75> kusomeepchan, greater roadrunner \(kemono friends\), 1girl, ((solo)), ")
                 prompt=prompt.replace("greater lophorina","lophorina")
-                if clothes: prompt=newreplace(prompt,"lophorina","<lora:lophorina:"+str(ran(70,100))+">, lophorina, superb bird-of-paradise (kemono friends), ")
-                if not clothes: prompt=newreplace(prompt,"lophorina","<lora:lophorina:"+str(ran(70,100))+">, lophorina, superb bird-of-paradise (kemono friends), ")
-                
-                prompt=newreplace(prompt,"natsuki2","<lora:natuki:0.65>, natuki, 1girl, ((solo)), pink hair, hair ornament, pink eyes, short hair, ribbon, hairclip, hair ribbon, pigtails, white tshirt, pink frilly skirt, rolled up sleeves, tucked in shirt, wide necked shirt, collarbone, [bra straps], ")
-                
-                if clothes: prompt=newreplace(prompt,"natsuki","<lora:natuki:"+str(ran(60,80))+">, natuki, 1girl, ((solo)), pink hair, hair ornament, pink eyes, short hair, ribbon, hairclip, hair ribbon, pigtails, school uniform, red ribbon, blue pleated skirt, brown blazer, ")
-                if not clothes: prompt=newreplace(prompt,"natsuki","<lora:natuki:"+str(ran(60,80))+">, natuki, 1girl, ((solo)), pink hair, hair ornament, pink eyes, short hair, hairclip, hair ribbon, pigtails ")
-                
-                
-                
-                prompt=prompt.replace("sans","<lora:sans:0.5>, sans,")
-
-                prompt=prompt.replace("senko","<lora:senko:"+str(ran(30,60))+">, senko")
-                prompt=prompt.replace("penis","<lora:penisLora_v1:"+str(ran(60,90))+">, penis")
-                prompt=prompt.replace("masses","<lora:masses:0.7>")
+                prompt=newreplace(prompt,"lophorina","<lora:lophorina:0.75> lophorina, superb bird-of-paradise (kemono friends), ")
+                prompt=newreplace(prompt,"natsuki2","<lora:natuki:0.65> natuki, 1girl, ((solo)), pink hair, hair ornament, pink eyes, short hair, ribbon, hairclip, hair ribbon, pigtails, white tshirt, pink frilly skirt, rolled up sleeves, tucked in shirt, wide necked shirt, collarbone, [bra straps], ")
+                prompt=newreplace(prompt,"natsuki","<lora:natuki:0.75> natuki, 1girl, ((solo)), pink hair, hair ornament, pink eyes, short hair, hairclip, hair ribbon, pigtails ")
+                prompt=prompt.replace('natuki, ','natuki, natsuki \(doki doki literature club\), ')
+                prompt=prompt.replace("sans","<lora:sans:0.5> sans,")
+                prompt=prompt.replace("senko","<lora:senko:0.75> senko")
                 prompt=prompt.replace("burger","<lora:burger:0.7> burger")
-                
                 prompt=prompt.replace("by cwc","<lora:cwc:1.1> by cwc")
-
-                if clothes: prompt=newreplace(prompt,"serval","<lora:serval:"+str(ran(70,100))+">, serval (kemono friends), 1girl, cat girl, serval ears, serval print, white sleeveless shirt, yellow bowtie, blonde hair, short hair, bare shoulders, white boots, large breasts, long gloves, ")
-                if not clothes: prompt=newreplace(prompt,"serval","<lora:serval:"+str(ran(70,100))+">, serval (kemono friends), 1girl, cat girl, serval ears, blonde hair, short hair, large breasts, ")
+                prompt=newreplace(prompt,"serval","<lora:serval:0.75> serval \(kemono friends\), 1girl, solo, ")
                 
-                #if clothes: prompt=newreplace(prompt,"toki","<lora:toki:"+str(ran(70,100))+">, toki, 1girl, ((solo)), head wings, white hair, bird tail, blunt bangs, yellow eyes, red pleated skirt, long sleeves, red gloves, frilled sleeves, wide sleeves, white shirt, shoes, neck ribbon, red fur collar, red legwear, red sidelocks, ")
-                #if not clothes: prompt=newreplace(prompt,"toki","<lora:toki:"+str(ran(70,100))+">, toki, 1girl, ((solo)), head wings, white hair, bird tail, blunt bangs, yellow eyes, red sidelocks, ")
-                
-                
-                prompt=newreplace(prompt,"toki","<lora:toki:0.65>, toki, ")
-                prompt=prompt.replace("arma","<lora:arma:0.8>, arma, giant armadillo \(kemono friends\), 1girl, solo, ")
-                prompt=prompt.replace("scarlet ibis","<lora:scarlet_ibis-red_toki:0.8>, red_toki, scarlet ibis \(kemono friends\), 1girl, solo, ")
-                if clothes: prompt=newreplace(prompt,"tsuchinoko","<lora:tsunsnek:"+str(ran(70,100))+">, tsunsnek, 1girl, solo, hood, hoodie, snake tail, aqua hair, long sleeves, striped hoodie, striped tail, short hair, pink neck ribbon, bangs, hair between eyes, hood up, geta, blue hair, aqua eyes, bare legs, blue eyes, crossed bangs, ahoge, ")
-                
-                if not clothes: prompt=newreplace(prompt,"tsuchinoko","<lora:tsunsnek:"+str(ran(70,100))+">, tsunsnek, 1girl, solo, snake tail, aqua hair, striped tail, short hair, bangs, hair between eyes, blue hair, aqua eyes, blue eyes, crossed bangs, ahoge, ")
-                prompt=prompt.replace('brid', '<lora:bird_wings:'+str(ran(70,100))+'>, anthro furry bird, winged arms,')
-                prompt=newreplace(prompt,"mikudayo","<lora:mikudayo_1:"+str(ran(70,100))+">, 1girl, (chibi:1.2), hatsune_miku, looking_at_viewer, open_mouth, smile, solo, standing,")
-                
-                
+                prompt=newreplace(prompt,"toki","<lora:toki:0.65> toki, crested ibis \(kemono friends\), 1girl, solo, ")
+                prompt=prompt.replace("arma","<lora:arma:0.8> arma, giant armadillo \(kemono friends\), 1girl, solo, ")
+                prompt=prompt.replace("scarlet ibis","<lora:scarlet_ibis-red_toki:0.8> red_toki, scarlet ibis \(kemono friends\), 1girl, solo, ")
+                prompt=newreplace(prompt,"tsuchinoko","<lora:tsunsnek:0.75> tsunsnek, tsuchinoko \(kemono friends\), 1girl, solo, ")
+                prompt=prompt.replace('brid', '<lora:bird_wings:0.75> anthro furry bird, winged arms,')
+                prompt=newreplace(prompt,"mikudayo","<lora:mikudayo_1:0.75> 1girl, (chibi:1.2), hatsune_miku, looking_at_viewer, open_mouth, smile, solo, standing,")
                 prompt=prompt.replace('amiya', '<lora:arknightsAMIYA_v10:0.8> amiya')
                 prompt=prompt.replace('nessa','<lora:character_pokemon_nessa:0.8> nessa')
                 prompt=prompt.replace('hooters','<lora:hooters:0.8> hooters')
                 prompt=prompt.replace('ricardo milos','<lora:ricardoMilos_v10:0.8> ricardo milos')
-                #prompt=prompt.replace('hooters','<lora:hooters:0.8> hooters')
                 prompt=prompt.replace('gawr gura','<lora:virtualYoutuberGawr_ggV1:0.8> gawr gura')
                 prompt=prompt.replace('karaoke','<lora:karaokeroom_test08:0.8> karaoke room')
                 prompt=prompt.replace('inkling','<lora:inklingGirlsLora_v1:0.8> inkling')
                 prompt=prompt.replace('koishi','<lora:komeijikoishiV01_komeijikoishiV01:0.8> koishi')
                 prompt=prompt.replace('diane foxington','<lora:dianeFoxington_v4:0.8> diane foxington')
-                prompt=prompt.replace('faputa','<lora:faputaFromMadeInAbyss_v10:0.8> (safe for work), solo, anthro, (faputa), monster girl, white hair, cute face, [dark skin], navel, 4 arms, extra arms')
-                prompt=newreplace(prompt,"common bottlenose dolphin","<lora:cbd:"+str(ran(70,100))+">, cbd, solo, 1girl, gray hair, ")
-                #tfm_jam19
-                prompt=prompt.replace('jam','<lora:tfmJam19FastFoodGirl_genesis:0.8> tfm_jam19')
-                prompt=prompt.replace('plastiq','<lora:plastiq_10:0.8> plastiq')
-                prompt=prompt.replace('doll','<lora:cuteJointsDollsLora_2:0.8> doll, dd')
+                prompt=newreplace(prompt,"common bottlenose dolphin","<lora:cbd:0.75> cbd, solo, 1girl, gray hair, ")
                 prompt=prompt.replace('kagamine_rin','kagamine rin')
-                #prompt=prompt.replace('kagamine_rin','rin')
                 prompt=prompt.replace('kagamine rin','<lora:KagamineRin_kagamineRin:0.8> kagamine_rin')
-                #prompt=prompt.replace('hooters','<lora:hooters:0.8> hooters')
-                #if not clothes: prompt=newreplace(prompt,"common bottlenose dolphin","<lora:cbd:"+str(ran(70,100))+">, cbd, solo, 1girl, blue hair, blue eyes, short hair, grey hair, dolphin tail, dorsal fin, blowhole, gradient hair, hair between eyes, bangs, head fins, dolphin girl, ")
                 prompt=prompt.replace('moviepeach','<lora:princessPeachMario_v10:0.7> princess peach')
-                prompt=prompt.replace('cum bath','<lora:cumBath_v10:0.7> cum bath')
-                if 'middle finger' in prompt: prompt='<lora:middlefinger:'+str(ran(70,100))+'>, '+prompt
-                if 'quicksand' in prompt or 'mud' in prompt: prompt='<lora:partially_submerged:'+str(ran(70,100))+'>, partially_submerged, '+prompt
+                prompt=prompt.replace('cum bath','<lora:cumBath_v10:0.7> cum bath') #lol
+                if 'middle finger' in prompt: prompt='<lora:middlefinger:0.75> '+prompt
+                if 'quicksand' in prompt or 'mud' in prompt: prompt='<lora:partially_submerged:0.75> partially_submerged, '+prompt
                 prompt=prompt.replace('character','myfuckingballshurtow')
-                if 'chara' in prompt: prompt='<lora:chara:'+str(ran(70,100))+'>, brown hair, '+prompt
+                if 'chara' in prompt: prompt='<lora:chara:0.75> brown hair, '+prompt
                 prompt=prompt.replace('myfuckingballshurtow','character')
-                if 'felix' in prompt: prompt='<lora:felix:'+str(ran(70,100))+'>, 1boy, male, '+prompt
-                if 'mgq' in prompt or 'monster girl quest' in prompt or 'mon-musu' in prompt: prompt='<lora:mgq:'+str(ran(90,110))+'>, '+prompt
+                if 'felix' in prompt: prompt='<lora:felix:0.75> 1boy, male, '+prompt
+                if 'mgq' in prompt or 'monster girl quest' in prompt or 'mon-musu' in prompt: prompt='<lora:mgq:0.75> '+prompt
                 
                 
-                prompt=newreplace(prompt,"sylph","<lora:sylph:"+str(ran(70,100))+">, sylphmgq, 1girl, ahoge, bare shoulders, breasts, sylph (mon-musu quest!), dress, elbow gloves, gloves, green dress, green hair, long hair, medium breasts, multicolored hair, mon-musu quest!, solo, yellow eyes, ")
+                prompt=newreplace(prompt,"sylph","<lora:sylph:0.75> sylphmgq, 1girl, ahoge, bare shoulders, breasts, sylph (mon-musu quest!), dress, elbow gloves, gloves, green dress, green hair, long hair, medium breasts, multicolored hair, mon-musu quest!, solo, yellow eyes, elf shoes, ")
                 
-                prompt=newreplace(prompt,"karyl","<lora:karyl:"+str(ran(30,70))+">, cat ears, black hair, green eyes, ")
+                prompt=newreplace(prompt,"karyl","<lora:karyl:"+str(ran(30,70))+"> cat ears, black hair, green eyes, ")
                 
-                prompt=newreplace(prompt,"pooltoy","<lora:pooltoy:"+str(ran(110,130))+">, pool_toy, ")
+                prompt=newreplace(prompt,"pooltoy","<lora:pooltoy:"+str(ran(110,130))+"> pool_toy, ")
                 prompt=prompt.replace("danganronpa","<lora:Danganronpa_Style:0.7> danganronpa style")
-                prompt=newreplace(prompt,"cat nonsense girl","<lora:karyl:"+str(ran(60,90))+">, cat ears, black hair, green eyes, ")
-                prompt=prompt.replace("yuki","<lora:yukicrush:"+str(ran(70,100))+">, yukicrush,")
+                prompt=newreplace(prompt,"cat nonsense girl","<lora:karyl:"+str(ran(60,90))+"> cat ears, black hair, green eyes, ")
+                prompt=prompt.replace("yuki","<lora:yukicrush:"+str(ran(70,100))+"> yukicrush,")
                 prompt=prompt.replace("rougethebat","<lora:rouge:0.5> rougethebat")
-                prompt=prompt.replace("tinkaton","<lora:tinkaton:"+str(ran(70,100))+">, tinkaton,")
+                prompt=prompt.replace("tinkaton","<lora:tinkaton:"+str(ran(70,100))+"> tinkaton,")
                 
-                #prompt=prompt.replace("mia","<lora:mia:"+str(ran(70,100))+">, mia,")
+                #prompt=prompt.replace("mia","<lora:mia:"+str(ran(70,100))+"> mia,")
                 
-                prompt=prompt.replace("pregnant","<lora:pregnant:"+str(ran(10,40))+">, pregnant,")
+                prompt=prompt.replace("pregnant","<lora:pregnant:"+str(ran(10,40))+"> pregnant,")
                 
-                prompt=prompt.replace("gardevoir","<lora:gardewhore:"+str(ran(60,100))+">, gardevoir,")
+                prompt=prompt.replace("gardevoir","<lora:gardewhore:"+str(ran(60,100))+"> gardevoir,")
                 
-                if 'neco' in prompt: prompt="<lora:neco:"+str(ran(100,110))+">, (necoarc, necopose),"+prompt
+                if 'neco' in prompt: prompt="<lora:neco:"+str(ran(100,110))+"> (necoarc, necopose),"+prompt
 
-                if "zun" in prompt: prompt="<lora:zun:"+str(ran(80,110))+">, ((zun, zun (style))), "+(prompt.replace('zun',''))
+                if "zun" in prompt: prompt="<lora:zun:"+str(ran(80,110))+"> ((zun, zun (style))), "+(prompt.replace('zun',''))
                 prompt=prompt.replace('tttttttttttttttttttttttttttttttt','izuna')
                 if len(prompt)<1:
                     prompt=''
                     for qyoo in range(random.randint(1,10)):
-                        prompt+='<lora:'+random.choice(['90s', 'akagitsu', 'analog', 'anime', 'anya', 'araisan', 'astolfo1', 'astolfo2', 'aussie', 'betterscales', 'bondrewd', 'braixen', 'cbd', 'cdi', 'chara', 'coyo', 'danny', 'dark', 'dolr', 'ezo', 'ezomodel', 'feen', 'felix', 'floppa', 'ftm', 'fubuki1', 'fubuki2', 'fumo', 'gardewhore', 'gingitsu', 'hyperBottomHeavy_v1', 'ilulu', 'izuna-v1-NAI-VAE-768px', 'jpwolf', 'karyl', 'kf1style', 'korone', 'kusomeepchan', 'leash_dom', 'leash_sub', 'leffrey', 'lophorina', 'marina', 'mgq', 'microwaist', 'middlefinger', 'natuki', 'nekomata', 'partially_submerged', 'persona', 'photo', 'pooltoy', 'pregnant', 'ryouna', 'sans', 'sayori', 'sayoriv4', 'scales', 'senkonanoja', 'serval', 'shimahai', 'shizue', 'spider', 'surtr', 'sylph', 'tinkaton', 'toki', 'tsunsnek', 'vhs', 'yukicrush', 'zun'])+':'+str(ran(10,120))+'>, '
+                        prompt+='<lora:'+random.choice(['90s', 'akagitsu', 'analog', 'anime', 'anya', 'araisan', 'astolfo1', 'astolfo2', 'aussie', 'betterscales', 'bondrewd', 'braixen', 'cbd', 'cdi', 'chara', 'coyo', 'danny', 'dark', 'dolr', 'ezo', 'ezomodel', 'feen', 'felix', 'floppa', 'ftm', 'fubuki1', 'fubuki2', 'fumo', 'gardewhore', 'gingitsu', 'hyperBottomHeavy_v1', 'ilulu', 'izuna-v1-NAI-VAE-768px', 'jpwolf', 'karyl', 'kf1style', 'korone', 'kusomeepchan', 'leash_dom', 'leash_sub', 'leffrey', 'lophorina', 'marina', 'mgq', 'microwaist', 'middlefinger', 'natuki', 'nekomata', 'partially_submerged', 'persona', 'photo', 'pooltoy', 'pregnant', 'ryouna', 'sans', 'sayori', 'sayoriv4', 'scales', 'senkonanoja', 'serval', 'shimahai', 'shizue', 'spider', 'surtr', 'sylph', 'tinkaton', 'toki', 'tsunsnek', 'vhs', 'yukicrush', 'zun'])+':'+str(ran(10,120))+'> '
             
             negs=''
             if not bypass and 'shrift' not in prompt.lower(): negs="lowres, bad anatomy, bad hands, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry, artist name, simple background, flat background,  high saturation, black and white, small feet, simple shading, flat shading, blue skin"
