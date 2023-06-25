@@ -535,7 +535,10 @@ class UtilityCommands(commands.Cog):
                 prompt=newreplace(prompt,"silver","<lora:gingitsu:0.7> gingitsu, silver fox \(kemono friends\), 1girl, solo, ")
                 prompt=prompt.replace('izuna','<lora:izuna-v1-NAI-VAE-768px:0.6456> izuna \(blue archive\), 1girl, solo') 
                 prompt=newreplace(prompt,"japanese wolf","<lora:jpwolf:0.8> japanese wolf (kemono friends), 1girl, solo, ")
-                prompt=prompt.replace('grey wolf','<lora:g_wolkf:0.8> g_wolkf, grey wolf \(kemono friends\), 1girl, solo, heterochromia')+' AND blue eyes, yellow eyes'
+                prompt=prompt.replace('grey wolf','<lora:g_wolkf:0.8> g_wolkf, grey wolf \(kemono friends\), 1girl, solo, heterochromia')
+                if 'wolkf' in prompt:
+                    prompt=prompt+' AND blue eyes, yellow eyes' 
+                    #It couldve been a one liner but for some reason python wants it to be like this now despite it literally fucking working before. :))))))_
                 prompt=prompt.replace("greater roadrunner","roadrunner")
                 #prompt=prompt.replace("penis","<lora:penisLora_v1:"+str(ran(60,90))+"> penis")
                 prompt=newreplace(prompt,"roadrunner","<lora:kusomeepchan:0.75> kusomeepchan, greater roadrunner \(kemono friends\), 1girl, ((solo)), ")
@@ -2584,7 +2587,7 @@ class UtilityCommands(commands.Cog):
             #await ctx.send('grok is DISABLED (flashlight may be generating furries or training a lora)')
             #return
             
-        if len(grokqueue)==0 and free<6:
+        if len(grokqueue)==0 and free<5.5:
             await ctx.send('[EXPERIMENTAL] Queue is fresh but VRAM is low, pausing grok')
             ungrok_override=True
             grokReason='Auto-disabled due to low VRAM'
