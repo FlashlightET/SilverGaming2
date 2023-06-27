@@ -2974,9 +2974,13 @@ class UtilityCommands(commands.Cog):
     
     @commands.command() #IS IT TUESDAY???
     async def tuesday(self, ctx=commands.Context):
+        momentum=419715716770562078
+        sam=206392667351941121
+        cris=211419370860183552
+        toutake=407564713740861440
         dt=datetime.datetime.today().weekday()
         #print(dt)
-        if ctx.author.id==419715716770562078: 
+        if ctx.author.id==momentum: 
             dt=(datetime.datetime.today() - timedelta(hours = 1)).weekday() 
             print('ball-sack!')
         #print(dt)
@@ -2984,28 +2988,28 @@ class UtilityCommands(commands.Cog):
         #if youre greek it also adjusts
         
         #this command has a lookup table for people who are greek and who are not
-        if ctx.author.id==206392667351941121: dt=(datetime.datetime.today() - timedelta(hours = 1)).weekday()
-        if ctx.author.id==211419370860183552: dt=(datetime.datetime.today() - timedelta(hours = 3)).weekday()
-        if ctx.author.id==407564713740861440: dt=(datetime.datetime.today() + timedelta(hours = 8)).weekday()
+        if ctx.author.id==sam: dt=(datetime.datetime.today() - timedelta(hours = 1)).weekday()
+        if ctx.author.id==cris: dt=(datetime.datetime.today() - timedelta(hours = 3)).weekday()
+        if ctx.author.id==toutake: dt=(datetime.datetime.today() + timedelta(hours = 8)).weekday()
         
         
         #dt=dt_.weekday()
         
         day=datetime.datetime.today().day
-        if ctx.author.id==419715716770562078: 
+        if ctx.author.id==momentum: 
             day=(datetime.datetime.today() - timedelta(hours = 1)).day 
             print('ball-sack!')
-        if ctx.author.id==206392667351941121: day=(datetime.datetime.today() - timedelta(hours = 1)).day
-        if ctx.author.id==211419370860183552: day=(datetime.datetime.today() - timedelta(hours = 3)).day
-        if ctx.author.id==407564713740861440: day=(datetime.datetime.today() + timedelta(hours = 8)).day
+        if ctx.author.id==sam: day=(datetime.datetime.today() - timedelta(hours = 1)).day
+        if ctx.author.id==cris: day=(datetime.datetime.today() - timedelta(hours = 3)).day
+        if ctx.author.id==toutake: day=(datetime.datetime.today() + timedelta(hours = 8)).day
         
         month=datetime.datetime.today().month
-        if ctx.author.id==419715716770562078: 
+        if ctx.author.id==momentum: 
             month=(datetime.datetime.today() - timedelta(hours = 1)).month
             print('ball-sack!')
-        if ctx.author.id==206392667351941121: month=(datetime.datetime.today() - timedelta(hours = 1)).month
-        if ctx.author.id==211419370860183552: month=(datetime.datetime.today() - timedelta(hours = 3)).month
-        if ctx.author.id==407564713740861440: month=(datetime.datetime.today() + timedelta(hours = 8)).month
+        if ctx.author.id==sam: month=(datetime.datetime.today() - timedelta(hours = 1)).month
+        if ctx.author.id==cris: month=(datetime.datetime.today() - timedelta(hours = 3)).month
+        if ctx.author.id==toutake: month=(datetime.datetime.today() + timedelta(hours = 8)).month
         
         
         #vv ITS TUESDAY vv
