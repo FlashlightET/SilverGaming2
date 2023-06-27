@@ -2975,11 +2975,11 @@ class UtilityCommands(commands.Cog):
     @commands.command() #IS IT TUESDAY???
     async def tuesday(self, ctx=commands.Context):
         dt=datetime.datetime.today().weekday()
-        print(dt)
+        #print(dt)
         if ctx.author.id==419715716770562078: 
             dt=(datetime.datetime.today() - timedelta(hours = 1)).weekday() 
             print('ball-sack!')
-        print(dt)
+        #print(dt)
         #if youre momentum (cst) and run it at 12:30am on a wednesday real people time (est) it says tuesday still
         #if youre greek it also adjusts
         
@@ -2987,26 +2987,50 @@ class UtilityCommands(commands.Cog):
         if ctx.author.id==206392667351941121: dt=(datetime.datetime.today() - timedelta(hours = 1)).weekday()
         if ctx.author.id==211419370860183552: dt=(datetime.datetime.today() - timedelta(hours = 3)).weekday()
         if ctx.author.id==407564713740861440: dt=(datetime.datetime.today() + timedelta(hours = 8)).weekday()
+        
+        
+        #dt=dt_.weekday()
+        
+        day=datetime.datetime.today().day
+        if ctx.author.id==419715716770562078: 
+            day=(datetime.datetime.today() - timedelta(hours = 1)).day 
+            print('ball-sack!')
+        if ctx.author.id==206392667351941121: day=(datetime.datetime.today() - timedelta(hours = 1)).day
+        if ctx.author.id==211419370860183552: day=(datetime.datetime.today() - timedelta(hours = 3)).day
+        if ctx.author.id==407564713740861440: day=(datetime.datetime.today() + timedelta(hours = 8)).day
+        
+        month=datetime.datetime.today().month
+        if ctx.author.id==419715716770562078: 
+            month=(datetime.datetime.today() - timedelta(hours = 1)).month
+            print('ball-sack!')
+        if ctx.author.id==206392667351941121: month=(datetime.datetime.today() - timedelta(hours = 1)).month
+        if ctx.author.id==211419370860183552: month=(datetime.datetime.today() - timedelta(hours = 3)).month
+        if ctx.author.id==407564713740861440: month=(datetime.datetime.today() + timedelta(hours = 8)).month
+        
+        
         #vv ITS TUESDAY vv
-        if dt==1: await ctx.send('https://cdn.discordapp.com/attachments/1069995179358031922/1072698277620895854/EqbbrjcXUAAH4cM.png')
-        #^^ ITS TUESDAY ^^
-        if dt==0:
-            with open('MONDAY.jpg','rb') as f:
-                await ctx.send(file=discord.File(f, filename='image.jpg')) #Shambles Cirno
-        if dt==2:
-            await ctx.send('https://tenor.com/view/made-in-abyss-anime-gif-26144590') #Made In Abyss Wednesday
-        if dt==3:
-            with open('thursday.png','rb') as f:
-                await ctx.send(file=discord.File(f, filename='image.png')) #Shambles Cirno
-        if dt==4:
-            with open('FRIDAY.jpg','rb') as f:
-                await ctx.send(file=discord.File(f, filename='image.jpg')) #Shambles Cirno
-        if dt==5:
-            with open('SATURDAY.jpg','rb') as f:
-                await ctx.send(file=discord.File(f, filename='image.jpg')) #Shambles Cirno
-        if dt==6:
-            with open('SUNDAY.jpg','rb') as f:
-                await ctx.send(file=discord.File(f, filename='image.jpg')) #Shambles Cirno
+        if day==26 and month==6:
+            await ctx.send('https://media.discordapp.net/attachments/490260282728251424/1123082402416296117/main-qimg-6dee728eeacac90bc3aa24fe900b427e.jpg') #Made In Abyss Wednesday
+        else:
+            if dt==1: await ctx.send('https://cdn.discordapp.com/attachments/1069995179358031922/1072698277620895854/EqbbrjcXUAAH4cM.png')
+            #^^ ITS TUESDAY ^^
+            if dt==0:
+                with open('MONDAY.jpg','rb') as f:
+                    await ctx.send(file=discord.File(f, filename='image.jpg')) #Shambles Cirno
+            if dt==2:
+                await ctx.send('https://tenor.com/view/made-in-abyss-anime-gif-26144590') #Made In Abyss Wednesday
+            if dt==3:
+                with open('thursday.png','rb') as f:
+                    await ctx.send(file=discord.File(f, filename='image.png')) #Shambles Cirno
+            if dt==4:
+                with open('FRIDAY.jpg','rb') as f:
+                    await ctx.send(file=discord.File(f, filename='image.jpg')) #Shambles Cirno
+            if dt==5:
+                with open('SATURDAY.jpg','rb') as f:
+                    await ctx.send(file=discord.File(f, filename='image.jpg')) #Shambles Cirno
+            if dt==6:
+                with open('SUNDAY.jpg','rb') as f:
+                    await ctx.send(file=discord.File(f, filename='image.jpg')) #Shambles Cirno
                 
                 
     
