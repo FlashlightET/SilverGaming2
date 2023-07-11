@@ -279,6 +279,15 @@ class UtilityCommands(commands.Cog):
         with open('x:\\images\\drake\\'+random.choice(os.listdir('x:\\images\\drake')), 'rb') as f:
             await ctx.send(file=discord.File(f))
             
+    @commands.command() #SEND A FUNNY DRAKE IMAGE
+    async def drooter(self, ctx: commands.Context, link=None):
+        if link is None: imgurl=ctx.message.attachments[0].url
+        if link is not None:imgurl=link
+        
+        with open('x:\\images\\drake\\drake_'+str(int(time.time()))+'.'+imgurl.split('.')[-1], 'wb') as f:
+            f.write(requests.get(imgurl).content)
+        await ctx.send('drake saved successfully')
+            
     @commands.command() #INSECAM
     async def cam(self, ctx: commands.Context, *, fuck=''):
         z=get_data("cams")
@@ -704,7 +713,7 @@ class UtilityCommands(commands.Cog):
             prompt=newreplace(prompt," ,",",")
             checkpoint='i_models\\Anything-V3.0-pruned-fp32.ckpt'
             __model=_model
-            if 'cwc' in prompt: checkpoint='fluffusion_r1_e6_640x.ckpt'
+            #if 'cwc' in prompt: checkpoint='fluffusion_r1_e6_640x.ckpt'
             if 'tofm' in prompt: checkpoint='x_models\\ThisOnesFinalMixv1.ckpt'
             if 'ezmix' in prompt: checkpoint='i_models\\abyss-rs-anything-rs-40-60.safetensors'
             if 'aom' in prompt: 
@@ -788,6 +797,7 @@ class UtilityCommands(commands.Cog):
                 prompt=prompt.replace('dpm','')
             if 'unipc' in prompt: 
                 __sampler='UniPC'
+                prompt=prompt.replace('AND',', ')
                 prompt=prompt.replace('unipc','')
             if 'reverse_prompts' in prompt:
                 prompt=prompt.replace('reverse_prompts','')
@@ -1866,6 +1876,94 @@ class UtilityCommands(commands.Cog):
         # print("11")
         await ctx.send('disabled because python sucks and broke my modules')
 
+
+
+    @commands.command() #get every emoji from the server as a zip
+    async def emojis(self, ctx=commands.Context, *cntnt):
+        if ' '.join(cntnt)=='custom':
+            emojis=[]
+            message=await ctx.send('react to this message with the emojis you want to download, then send a message. this will add the emojis to a persistent user archive')
+            def check(m):
+                return m.author == ctx.message.author
+            await self.bot.wait_for('message', check=check)
+            message=await ctx.fetch_message(message.id)
+            #await ctx.send('k!!'+str(message.reactions))
+            for i in message.reactions:
+                emojis.append(i.emoji)
+            #await ctx.send(f'{emojis}')
+            id = ctx.author.id
+        else:
+            emojis = ctx.guild.emojis
+            id = ctx.guild.id
+            
+        #cntnt=cntnt.replace('><','> <')
+        emojiarchivetimestamp=datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        
+        
+        work_dir_root = f'x:\\emojis_temp\\emojis\\'
+        work_dir = f'x:\\emojis_temp\\emojis\\{id}\\'
+        os.system(f'mkdir "{work_dir}"') #os.system allows me to skip using a try except at the cost of not working on linux boo hoo
+        debugMessageStuff=['*fun fact: you can get custom emojis from other servers if you run .emojis custom*',f'[{datetime.datetime.now().strftime("%I:%M:%S %p")}] scraping server emojis...']
+        debugMessage=await ctx.send('\n'.join(debugMessageStuff))
+        new=0
+        skipped=0
+        for emoji in emojis:
+            imageUrl=str(emoji.url)
+            creationTime=emoji.created_at #datetime.datetime object
+            emojiName=emoji.name
+            emojiId=str(emoji.id)
+            
+            #truncate emoji id to make the name less long but still leave it differentiatable in the case of a conflict
+            emojiId=emojiId[:3]+emojiId[-3:]
+            
+            fp=f'{work_dir}{emojiName} {emojiId}.{imageUrl.split(".")[-1]}' #fp stands for file path I CHOSE THIS BARIABLE NAME
+            if os.path.exists(fp):
+                skipped+=1
+            else:
+                imageRequest=requests.get(imageUrl).content
+                with open(fp,'wb') as f:
+                    f.write(imageRequest)
+                os.utime(fp, (creationTime.timestamp(), creationTime.timestamp()))
+                new+=1
+                
+        
+                
+                
+        debugMessageStuff.append(f'[{datetime.datetime.now().strftime("%I:%M:%S %p")}] scraping complete ({new} new, {skipped} skipped)')
+        await debugMessage.edit(content='\n'.join(debugMessageStuff))
+        debugMessageStuff.append(f'[{datetime.datetime.now().strftime("%I:%M:%S %p")}] zipping...') #ratelimit makes it seem like its doing more stuff :trofflace: (smirking trollface)
+        await debugMessage.edit(content='\n'.join(debugMessageStuff))
+        fn=f'emojiarchive_{id}_{emojiarchivetimestamp}.zip'
+        if ' '.join(cntnt)=='custom': fn=f'emojiarchive_{ctx.author.name}_{emojiarchivetimestamp}.zip'
+        sevenzip_path='7z.exe' #~~dont feel like restarting the bot lol~~ it was being stupid so i just put 7z in the bot dir
+        cmd=f'{sevenzip_path} a -tzip "{work_dir_root}{fn}" "{work_dir}"'
+        #await ctx.send(f'`{cmd}`')
+        os.system(cmd)
+        
+        
+        fsize=os.path.getsize(f'{work_dir_root}{fn}')
+        fsize_str=f'{fsize} bytes'
+        if fsize>1000:
+            fsize=(fsize//10.24)/100
+            fsize_str=f'{fsize} KB'
+        if fsize>1000:
+            fsize=(fsize//10.24)/100
+            fsize_str=f'{fsize} MB'
+        if fsize>1000:
+            fsize=(fsize//10.24)/100
+            fsize_str=f'{fsize} GB' #????????
+        
+        debugMessageStuff.append(f'[{datetime.datetime.now().strftime("%I:%M:%S %p")}] uploading... ({fsize_str})') #ratelimit makes it seem like its doing more stuff :trofflace: (smirking trollface)
+        await debugMessage.edit(content='\n'.join(debugMessageStuff))
+        
+        with open(f'{work_dir_root}{fn}', 'rb') as f: 
+            f2 = discord.File(f, filename=fn)
+            await ctx.reply('your emoji archive, sir',file=f2)
+        os.remove(f'{work_dir_root}{fn}')
+        debugMessageStuff.append(f'[{datetime.datetime.now().strftime("%I:%M:%S %p")}] execution complete!...') #ratelimit makes it seem like its doing more stuff :trofflace: (smirking trollface)
+        await debugMessage.edit(content='\n'.join(debugMessageStuff))
+
+
     @commands.command(aliases=["wc",'WC']) #wordcloud bc NOT SOBOT
     async def cloud(self, ctx=commands.Context,limit=50):
         try:
@@ -2516,7 +2614,7 @@ class UtilityCommands(commands.Cog):
         global ungrok
         global ungrok_override
         def check(m):
-            return m.content != 'agdfgadfgadfhadfhadfhfahf'
+            return m.content != 'agdfgadfgadfhadfhadfhfahf'*2000 #this string is too long to ever be sent even with 4k nitro
         def check2(m):
             return m.author.id==158418656861093888
         if fuck=='disable':

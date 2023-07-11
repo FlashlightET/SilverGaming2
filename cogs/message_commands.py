@@ -815,17 +815,26 @@ class MessageCommands(commands.Cog):
         #print(safe_users)
         selected_user=random.choice(safe_users)
         #await ctx.send(selected_user)
-        for message in cur.execute('SELECT * FROM messages WHERE channel_id IN ('+(','.join(safechannels))+') AND text NOT LIKE \'.%\' AND text NOT LIKE \'--%\' AND text NOT LIKE \'<@%\' AND text NOT LIKE \'n.%\' AND text NOT LIKE \'fd%\' AND text NOT LIKE \'d.%\' AND text NOT LIKE \'!%\' AND text NOT LIKE \'^%\' AND text NOT LIKE \'$%\' AND sender_id='+selected_user):
+        exe='SELECT * FROM messages WHERE channel_id IN ('+(','.join(safechannels))+') AND text NOT LIKE \'.%\' AND text NOT LIKE \'--%\' AND text NOT LIKE \'<@%\' AND text NOT LIKE \'n.%\' AND text NOT LIKE \'fd%\' AND text NOT LIKE \'d.%\' AND text NOT LIKE \'!%\' AND text NOT LIKE \'^%\' AND text NOT LIKE \'$%\' AND sender_id='
+        if amt=='toonatic': exe='SELECT * FROM messages WHERE channel_id IN ('+(','.join(safechannels))+') OR text LIKE \'.%\' OR text LIKE \'--%\' OR text LIKE \'<@%\' OR text LIKE \'n.%\' OR text LIKE \'fd%\' OR text LIKE \'d.%\' OR text LIKE \'!%\' OR text LIKE \'^%\' OR text LIKE \'$%\' AND sender_id='
+        
+        for message in cur.execute(exe+selected_user):
             results.append(message)
         testmsg=''
         result=(0, 0, 0, '', 0)
         tries=0
         while result[3] is '' or 'http' in result[3] or 'mado' in result[3].lower() and tries<100000:
             tries+=1
-            if amt is None:
+            if amt is None or amt is 'normal':
                 print(result)
                 result=random.choice(results)
             else:
+                if amt=='toonatic' and tries<100000:
+                    result=(0, 0, 0, 'jhdgjhdghkdsghykdghkdghkdghkghkdghkdghkdghkdgkgh', 0)
+                    while len(result[3])>4 and tries<100000:
+                        print(result)
+                        result=random.choice(results)
+                        tries+=1
                 if amt=='lunatic' and tries<100000:
                     result=(0, 0, 0, 'jhdgjhdghkdsghykdghkdghkdghkghkdghkdghkdghkdgkgh', 0)
                     while len(result[3])>4 and tries<100000:
@@ -850,74 +859,110 @@ class MessageCommands(commands.Cog):
                         print(result)
                         result=random.choice(results)
                         tries+=1
+                elif amt=='leaderboard':
+                    with open('h:\\frart\\wsi.txt','r',encoding='utf-8') as f:
+                        grump=f.readlines()
+                    for i in range(len(grump)):
+                        userid=grump[i].split(': ')[0]
+                        right=grump[i].split(': ')[1].split(',')[0]
+                        total=grump[i].split(': ')[1].split(',')[1]
+                        un=await self.bot.fetch_user(userid)
+                        owen=un.name
+                        perc=int((int(right)/int(total))*1000)/10
+                        KYS=total.strip("\r\n")
+                        KYS2=right.strip("\r\n")
+                        grump[i]=f'{owen}: {KYS2} right, {KYS} total ({perc}%)'
+                    await ctx.send('WSI Leaderboard!!!\n`'+'\n'.join(grump)+'`')
+                    break
                 else:
                     ctx.send('fuck you')
                     break
-                        
-        testmsg+=str(result)
-        for i in data['users']:
-            if i[0]==selected_user: correct_user=i[1]
-        testmsg+='\ncorrect answer(s): '+str(correct_user)
+        if amt!='leaderboard':
+            testmsg+=str(result)
+            for i in data['users']:
+                if i[0]==selected_user: correct_user=i[1]
+            testmsg+='\ncorrect answer(s): '+str(correct_user)
 
-        def ordinalize(num):
-            suf=''
-            if str(num)[-1]=='0': suf='th'
-            if str(num)[-1]=='1': suf='st'
-            if str(num)[-1]=='2': suf='nd'
-            if str(num)[-1]=='3': suf='rd'
-            if str(num)[-1]=='4': suf='th'
-            if str(num)[-1]=='5': suf='th'
-            if str(num)[-1]=='6': suf='th'
-            if str(num)[-1]=='7': suf='th'
-            if str(num)[-1]=='8': suf='th'
-            if str(num)[-1]=='9': suf='th'
-            return str(num)+suf
+            def ordinalize(num):
+                suf=''
+                if str(num)[-1]=='0': suf='th'
+                if str(num)[-1]=='1': suf='st'
+                if str(num)[-1]=='2': suf='nd'
+                if str(num)[-1]=='3': suf='rd'
+                if str(num)[-1]=='4': suf='th'
+                if str(num)[-1]=='5': suf='th'
+                if str(num)[-1]=='6': suf='th'
+                if str(num)[-1]=='7': suf='th'
+                if str(num)[-1]=='8': suf='th'
+                if str(num)[-1]=='9': suf='th'
+                return str(num)+suf
 
-        msg_id=result[0]
-        usr_id=result[1]
-        chn_id=result[2]
-        timest=result[4]
+            msg_id=result[0]
+            usr_id=result[1]
+            chn_id=result[2]
+            timest=result[4]
 
-        time=datetime.utcfromtimestamp(int(timest)/1000).strftime('%A, %B replace, %Y at %I:%M:%S %p')
-        goo=int(datetime.utcfromtimestamp(int(timest)/1000).strftime('%d'))
-        time=time.replace('replace',ordinalize(goo))
+            time=datetime.utcfromtimestamp(int(timest)/1000).strftime('%A, %B replace, %Y at %I:%M:%S %p')
+            goo=int(datetime.utcfromtimestamp(int(timest)/1000).strftime('%d'))
+            time=time.replace('replace',ordinalize(goo))
 
-        for channel in cur.execute('SELECT * FROM channels WHERE id='+str(chn_id)):
-            srv_id=channel[1]
-            chn_nm=channel[2]
-            break
-
-        ball='#'+chn_nm
-
-
-
-        embed=discord.Embed(title=ball, description=result[3],color=0xEEE2A0,timestamp=datetime.utcfromtimestamp(int(timest)/1000))
-        embed.set_author(name='???', icon_url='https://archive.org/download/discordprofilepictures/discordblue.png')
+            for channel in cur.execute('SELECT * FROM channels WHERE id='+str(chn_id)):
+                srv_id=channel[1]
+                chn_nm=channel[2]
+                break
+            
+            ball='#'+chn_nm
 
 
-        botmessage=await ctx.reply(ctx.message.author.display_name+': this is your question',embed=embed, mention_author=False)
-        def check(message):
-            #print(message.channel)
-            #print(botmessage.channel)
-            return message.channel == botmessage.channel and message.author == ctx.message.author
-        msg = await self.bot.wait_for("message",check=check)
 
-        if msg.content.lower() in correct_user:
-            await msg.reply('correct!', mention_author=False)
-        else:
-            await msg.reply('incorrect - correct user: '+str(correct_user), mention_author=False)
+            embed=discord.Embed(title=ball, description=result[3],color=0xEEE2A0,timestamp=datetime.utcfromtimestamp(int(timest)/1000))
+            embed.set_author(name='???', icon_url='https://archive.org/download/discordprofilepictures/discordblue.png')
 
-        for user in cur.execute('SELECT * FROM users WHERE id='+str(usr_id)):
-            usr_nm=str(user[1])+(('#'+str(user[3])))
-            break
-        gay_ass=await self.bot.fetch_user(usr_id)
-        try:
-            z=gay_ass.avatar_url
-        except:
-            z='https://cdn.discordapp.com/attachments/896060285763325962/1006518279478722642/85dcfc5d1408c7dfca0278377da1ee60.png'
-        embed.set_author(name=usr_nm, icon_url=z)
-        embed.set_footer(text="MessageID: "+str(msg_id))
-        await botmessage.edit(embed=embed)
+
+            botmessage=await ctx.reply(ctx.message.author.display_name+': this is your question',embed=embed, mention_author=False)
+            def check(message):
+                #print(message.channel)
+                #print(botmessage.channel)
+                return message.channel == botmessage.channel and message.author == ctx.message.author
+            msg = await self.bot.wait_for("message",check=check)
+            with open('h:\\frart\\wsi.txt','r',encoding='utf-8') as f:
+                grump=f.readlines()
+            #await ctx.send('Initial File Read\n`'+'\n'.join(grump)+'`')
+            inTheThing=False
+            for i in grump:
+                if str(ctx.message.author.id)+': ' in i: inTheThing=True
+            if not inTheThing:
+                grump.append(str(ctx.message.author.id)+': 0,0')
+                #await ctx.send('Not In File, Appending\n`'+'\n'.join(grump)+'`')
+                
+            for i in range(len(grump)):
+                grump[i]=grump[i].strip('\r\n')
+                if str(ctx.message.author.id)+': ' in grump[i]:
+                    right=int(grump[i].split(': ')[1].split(',')[0])
+                    total=int(grump[i].split(': ')[1].split(',')[1])
+                    if msg.content.lower() in correct_user: right+=1
+                    total+=1
+                    grump[i]=str(ctx.message.author.id)+f': {right},{total}'
+            #await ctx.send('Final To Write\n`'+'\n'.join(grump)+'`')
+            with open('h:\\frart\\wsi.txt','w',encoding='utf-8') as f:
+                f.writelines('\n'.join(grump))
+            
+            if msg.content.lower() in correct_user:
+                await msg.reply('correct!', mention_author=False)
+            else:
+                await msg.reply('incorrect - correct user: '+str(correct_user), mention_author=False)
+
+            for user in cur.execute('SELECT * FROM users WHERE id='+str(usr_id)):
+                usr_nm=str(user[1])+(('#'+str(user[3])))
+                break
+            gay_ass=await self.bot.fetch_user(usr_id)
+            try:
+                z=gay_ass.avatar_url
+            except:
+                z='https://cdn.discordapp.com/attachments/896060285763325962/1006518279478722642/85dcfc5d1408c7dfca0278377da1ee60.png'
+            embed.set_author(name=usr_nm, icon_url=z)
+            embed.set_footer(text="MessageID: "+str(msg_id))
+            await botmessage.edit(embed=embed)
 
 
     @commands.command()
@@ -1013,7 +1058,7 @@ class MessageCommands(commands.Cog):
                 if str(num)[-1]=='9': suf='th'
                 return str(num)+suf
 
-            con = sqlite3.connect('i:\\dht\\archiveREEAL.dht')
+            con = sqlite3.connect('i:\\dht\\archiveREEAL - Copy (2).dht')
 
             cur = con.cursor()
 
